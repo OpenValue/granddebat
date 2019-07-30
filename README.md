@@ -39,3 +39,9 @@ Replace __call\__ method by :
             token._.lefff_lemma = lemma
     return doc
 
+## RUN
+If needed, change parameters of application : folder paths (for data, model and plots), stopwords list etc... (see CAPITALIZED variables in main.py).
+Then run : 
+
+    python main.py
+    

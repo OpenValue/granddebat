@@ -13,30 +13,39 @@ import re
 with open("conf.json", 'rb') as json_file:
     conf = json.load(json_file)
 
-# Define Parameters
+# Define path
 DATA_FOLDER = "data"
 MODEL_FOLDER = "model"
 PLOT_FOLDER = "viz"
 
+# Create path
 for folder in [DATA_FOLDER, MODEL_FOLDER, PLOT_FOLDER]:
     if os.path.exists(os.getcwd() + "/" + folder) == False:
         os.makedirs(os.getcwd() + "/" + folder + "/")
 
+#Parameters
+# IDCOLS are columns that are not contributions from citizens
 IDCOLS = ['authorId', 'authorType', 'authorZipCode', 'createdAt', 'id', 'publishedAt', 'reference', 'title', 'trashed',
           'trashedStatus', 'updatedAt']
 
+#Liste of stop words
 STOPWORDS = set(
     stopwords.words('french') +
     ["none", "les", "etc", "leurs", "ils", "car", "cela",
      "cet", "cette", "ou", "or", "neant", "nsp"]
 )
 
+# Do you wanna plot low dim embeddings ?
 PLOTS = False
 
+# Max number of words used
 TOP_N_WORDS = 8000
 
+# SEE THEMES LINKED TO KEYWORDS
+KEYWORDS = ["ecologie", "impot", "sante", "politique", "president"]
 
-def main():
+
+def main(keywords):
     # Collect data - Download all raw csv files in data folder
     collect_and_load.collect_all_files(conf, folder=DATA_FOLDER)
 
@@ -97,8 +106,7 @@ def main():
                                          plot_top_n_words=TOP_N_WORDS)
 
     # CLUSTERING : FIND THEMES BY CLUSTERING EMBEDDINGS
-
-    # Kmeans
+    # UNCOMMENT TO USE Kmeans
     # clustered_low_dim_embeddings_df = clustering.compute_and_get_kmeans_clusters(low_dim_embeddings_df, number_of_clusters=100)
 
     # Hierarchical clustering
@@ -107,16 +115,8 @@ def main():
     clustered_low_dim_embeddings_df = clustering.compute_and_get_hierarchical_clusters(low_dim_embeddings_df,
                                                                                        number_of_clusters=75)
 
-
-    # Will create and open an html file
-    KEYWORDS = ["ecologie", "impot", "sante", "politique", "president"]
-
-    # OK with 10 clusters
-    # OK with 25 clusters
-    # OK with 50 clusters
-
     clusters_for_keywords = clustered_low_dim_embeddings_df[
-        clustered_low_dim_embeddings_df["word"].isin(KEYWORDS)].groupby("cluster")["word"].agg(list).to_dict()
+        clustered_low_dim_embeddings_df["word"].isin(keywords)].groupby("cluster")["word"].agg(list).to_dict()
 
     if PLOTS:
         reduce_dimension.plot_embeddings_with_clusters(clustered_low_dim_embeddings_df,
@@ -134,14 +134,6 @@ def main():
         print(clustered_low_dim_embeddings_df[clustered_low_dim_embeddings_df["cluster"] == cluster].sort_values(
             "pagerank_score", ascending=False).head(10).loc[:, "word"].values.tolist())
 
-    #for cluster in clustered_low_dim_embeddings_df["cluster"].sort_values().unique():
-    #    print("*" * 50)
-    #    print("Cluster :", cluster)
-    #    print("Number of words :",
-    #          clustered_low_dim_embeddings_df[clustered_low_dim_embeddings_df["cluster"] == cluster].shape[0])
-    #    print(clustered_low_dim_embeddings_df[clustered_low_dim_embeddings_df["cluster"] == cluster].sort_values(
-    #        "pagerank_score", ascending=False).head(10).loc[:, "word"].values.tolist())
-#
 
 if __name__ == '__main__':
-    main()
+    main(KEYWORDS)

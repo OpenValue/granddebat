@@ -1,0 +1,40 @@
+{
+  "LA_TRANSITION_ECOLOGIQUE.csv": {
+    "url": "http://opendata.auth-6f31f706db6f4a24b55f42a6a79c5086.storage.sbg5.cloud.ovh.net/2019-03-21/LA_TRANSITION_ECOLOGIQUE.csv",
+    "closed_questions": [
+      "QUXVlc3Rpb246MTQ2 - Diriez-vous que votre vie quotidienne est aujourd'hui touchée par le changement climatique ?",
+      "QUXVlc3Rpb246MTQ4 - À titre personnel, pensez-vous pouvoir contribuer à protéger l'environnement ?",
+      "QUXVlc3Rpb246MTUy - Par rapport à votre mode de chauffage actuel, pensez-vous qu'il existe des solutions alternatives plus écologiques ?",
+      "QUXVlc3Rpb246MTU0 - Avez-vous pour vos déplacements quotidiens la possibilité de recourir à des solutions de mobilité alternatives à la voiture individuelle comme les transports en commun, le covoiturage, l'auto-partage, le transport à la demande, le vélo, etc. ?"
+    ]
+  },
+  "LA_FISCALITE_ET_LES_DEPENSES_PUBLIQUES.csv": {
+    "url": "http://opendata.auth-6f31f706db6f4a24b55f42a6a79c5086.storage.sbg5.cloud.ovh.net/2019-03-21/LA_FISCALITE_ET_LES_DEPENSES_PUBLIQUES.csv",
+    "closed_questions": []
+  },
+  "DEMOCRATIE_ET_CITOYENNETE.csv": {
+    "url": "http://opendata.auth-6f31f706db6f4a24b55f42a6a79c5086.storage.sbg5.cloud.ovh.net/2019-03-21/DEMOCRATIE_ET_CITOYENNETE.csv",
+    "closed_questions": [
+      "QUXVlc3Rpb246MTA4 - En dehors des élus politiques, faut-il donner un rôle plus important aux associations et aux organisations syndicales et professionnelles ?",
+      "QUXVlc3Rpb246MTEx - Le non-cumul des mandats instauré en 2017 pour les parlementaires (députés et sénateurs) est :",
+      "QUXVlc3Rpb246MTE0 - Pensez-vous qu'il serait souhaitable de réduire le nombre d'élus (hors députés et sénateurs) ?",
+      "QUXVlc3Rpb246MTE3 - Faut-il prendre en compte le vote blanc ?",
+      "QUXVlc3Rpb246MTIw - Faut-il faciliter le déclenchement du référendum d'initiative partagée (le RIP est organisé à l'initiative de membres du Parlement soutenu par une partie du corps électoral) qui est applicable depuis 2015 ?",
+      "QUXVlc3Rpb246MTI0 - Faut-il les transformer ?",
+      "QUXVlc3Rpb246MTM4 - Pensez-vous qu'il faille instaurer des contreparties aux différentes allocations de solidarité ?"
+    ]
+  },
+  "ORGANISATION_DE_LETAT_ET_DES_SERVICES_PUBLICS.csv": {
+    "url": "http://opendata.auth-6f31f706db6f4a24b55f42a6a79c5086.storage.sbg5.cloud.ovh.net/2019-03-21/ORGANISATION_DE_LETAT_ET_DES_SERVICES_PUBLICS.csv",
+    "closed_questions": [
+      "QUXVlc3Rpb246MTcw - Selon vous, l'Etat doit-il aujourd'hui transférer de nouvelles missions aux collectivités territoriales ?",
+      "QUXVlc3Rpb246MjA0 - Estimez-vous avoir accès aux services publics dont vous avez besoin ?",
+      "QUXVlc3Rpb246MTc1 - Avez-vous déjà utilisé certaines de ces nouvelles formes de services publics ?",
+      "QUXVlc3Rpb246MTc2 - Si oui, en avez-vous été satisfait ?",
+      "QUXVlc3Rpb246MTgw - Connaissez-vous le \"droit à l'erreur\", c'est-à-dire le droit d'affirmer votre bonne foi lorsque vous faites un erreur dans vos déclarations ?",
+      "QUXVlc3Rpb246MTgx - Si oui, avez-vous déjà utilisé ce droit à l'erreur ?",
+      "QUXVlc3Rpb246MTg0 - Faut-il donner plus d'autonomie aux fonctionnaires de terrain ?",
+      "QUXVlc3Rpb246MTg2 - Faut-il revoir le fonctionnement et la formation de l'administration ?"
+    ]
+  }
+}

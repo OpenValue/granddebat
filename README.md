@@ -23,7 +23,7 @@ launch :
 
     python -m spacy download fr_core_news_sm
 
-## Fix : Edit lefff.py
+## (Optional) Fix : Edit lefff.py if spacy_lefff before 0.3.5 (better to update)
 lefff.py file is located here: 
 ~/anaconda/envs/granddebat/lib/python3.6/site-packages/spacy_lefff/lefff.py
 

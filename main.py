@@ -23,12 +23,12 @@ for folder in [DATA_FOLDER, MODEL_FOLDER, PLOT_FOLDER]:
     if os.path.exists(os.getcwd() + "/" + folder) == False:
         os.makedirs(os.getcwd() + "/" + folder + "/")
 
-#Parameters
+# Parameters
 # IDCOLS are columns that are not contributions from citizens
 IDCOLS = ['authorId', 'authorType', 'authorZipCode', 'createdAt', 'id', 'publishedAt', 'reference', 'title', 'trashed',
           'trashedStatus', 'updatedAt']
 
-#Liste of stop words
+# Liste of stop words
 STOPWORDS = set(
     stopwords.words('french') +
     ["none", "les", "etc", "leurs", "ils", "car", "cela",
@@ -41,8 +41,12 @@ PLOTS = False
 # Max number of words used
 TOP_N_WORDS = 8000
 
+# Number of clusters
+NUM_CLUSTERS = 1000
+
 # SEE THEMES LINKED TO KEYWORDS
-KEYWORDS = ["ecologie", "impot", "sante", "politique", "president"]
+KEYWORDS = ["climatique", "agriculture", "ecologie", "impot", "sante", "politique", "president", "elite", "social",
+            "migrant", "environnement", "nucleaire", "guerre", "emploi", "chomage"]
 
 
 def main(keywords):
@@ -58,7 +62,6 @@ def main(keywords):
         questions_cols = [col for col in df.columns if col not in IDCOLS]
         df = df.loc[:, questions_cols].fillna("")
 
-
         raw_contributions = [df[df[q_col].map(len) > 0].loc[:, q_col].values.tolist() for q_col in questions_cols]
 
         # Flatten contribs & remove duplicates
@@ -66,10 +69,11 @@ def main(keywords):
             [item for sublist in raw_contributions for item in
              sublist]))
 
-        raw_contributions = [re.sub("[#\"$’%&\'()'*+,\-/:;<-=>@[\\]^_`{|}~]", ' ', re.sub("€", " euros", contrib)) for contrib
+        raw_contributions = [re.sub("[#\"$’%&\'()'*+,\-/:;<-=>@[\\]^_`{|}~]", ' ', re.sub("€", " euros", contrib)) for
+                             contrib
                              in raw_contributions]
 
-        raw_contributions = [contrib for contrib in raw_contributions if len(contrib.split(" "))>0]
+        raw_contributions = [contrib for contrib in raw_contributions if len(contrib.split(" ")) > 0]
         # Clean contributions & save results in contributions.txt
         process.clean_contributions(raw_contributions,
                                     corpus_path=os.getcwd() + "/" + DATA_FOLDER + "/contributions.txt",
@@ -94,6 +98,8 @@ def main(keywords):
     # Get words embeddings
     words, embeddings = modeling.get_top_words_embeddings(model, top_n_words=TOP_N_WORDS)
 
+    print(model.wv["macron"])
+
     # Reduce Dimension of embeddings using UMAP - return a pandas df
     low_dim_embeddings_df = reduce_dimension.get_low_dim_embeddings_df(words, embeddings)
 
@@ -107,13 +113,13 @@ def main(keywords):
 
     # CLUSTERING : FIND THEMES BY CLUSTERING EMBEDDINGS
     # UNCOMMENT TO USE Kmeans
-    # clustered_low_dim_embeddings_df = clustering.compute_and_get_kmeans_clusters(low_dim_embeddings_df, number_of_clusters=100)
+    # clustered_low_dim_embeddings_df = clustering.compute_and_get_kmeans_clusters(low_dim_embeddings_df, number_of_clusters=NUM_CLUSTERS)
 
     # Hierarchical clustering
     # To get a viz of the dendrogram add an output_path parameter such as
     # output_path=os.getcwd() + "/" + PLOT_FOLDER + "/hierarchical_clustering.pdf"
     clustered_low_dim_embeddings_df = clustering.compute_and_get_hierarchical_clusters(low_dim_embeddings_df,
-                                                                                       number_of_clusters=75)
+                                                                                       number_of_clusters=NUM_CLUSTERS)
 
     clusters_for_keywords = clustered_low_dim_embeddings_df[
         clustered_low_dim_embeddings_df["word"].isin(keywords)].groupby("cluster")["word"].agg(list).to_dict()
@@ -121,16 +127,15 @@ def main(keywords):
     if PLOTS:
         reduce_dimension.plot_embeddings_with_clusters(clustered_low_dim_embeddings_df,
                                                        output_path=os.getcwd() + "/" + PLOT_FOLDER + "/test.html",
-                                                       title="Zoom sur 2 clusters",
+                                                       title="Zoom sur certains clusters",
                                                        clusters=clusters_for_keywords.keys())
 
-    # add page rank score
+    # PAGE RANK
     clustered_low_dim_embeddings_df = pagerank.get_page_rank_df(clustered_low_dim_embeddings_df)
-
 
     for cluster in clusters_for_keywords.keys():
         print("*" * 50)
-        print("Cluster keywords :", clusters_for_keywords[cluster])
+        print("Cluster number {} with keywords : {}".format(cluster, clusters_for_keywords[cluster]))
         print(clustered_low_dim_embeddings_df[clustered_low_dim_embeddings_df["cluster"] == cluster].sort_values(
             "pagerank_score", ascending=False).head(10).loc[:, "word"].values.tolist())
 

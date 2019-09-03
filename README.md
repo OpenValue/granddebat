@@ -1,6 +1,6 @@
 # GRAND DEBAT
 
-Here is the source code linked to the [medium article] (https://medium.com/@contact_8561/une-analyse-des-donn%C3%A9es-du-grand-d%C3%A9bat-national-761f8b6e9e19)
+Here is the source code linked to the [medium article](https://medium.com/@contact_8561/une-analyse-des-donn%C3%A9es-du-grand-d%C3%A9bat-national-761f8b6e9e19)
 
 
 # Instructions 

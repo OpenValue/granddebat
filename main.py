@@ -8,6 +8,7 @@ import json
 from nltk.corpus import stopwords
 import os
 import re
+import numpy as np
 
 # Load conf with URL of raw csv files and closed questions list per file
 with open("conf.json", 'rb') as json_file:
@@ -36,13 +37,13 @@ STOPWORDS = set(
 )
 
 # Do you wanna plot low dim embeddings ?
-PLOTS = False
+PLOTS = True
 
 # Max number of words used
 TOP_N_WORDS = 8000
 
 # Number of clusters
-NUM_CLUSTERS = 1000
+NUM_CLUSTERS = 20
 
 # SEE THEMES LINKED TO KEYWORDS
 KEYWORDS = ["climatique", "agriculture", "ecologie", "impot", "sante", "politique", "president", "elite", "social",
@@ -98,8 +99,6 @@ def main(keywords):
     # Get words embeddings
     words, embeddings = modeling.get_top_words_embeddings(model, top_n_words=TOP_N_WORDS)
 
-    print(model.wv["macron"])
-
     # Reduce Dimension of embeddings using UMAP - return a pandas df
     low_dim_embeddings_df = reduce_dimension.get_low_dim_embeddings_df(words, embeddings)
 
@@ -124,12 +123,6 @@ def main(keywords):
     clusters_for_keywords = clustered_low_dim_embeddings_df[
         clustered_low_dim_embeddings_df["word"].isin(keywords)].groupby("cluster")["word"].agg(list).to_dict()
 
-    if PLOTS:
-        reduce_dimension.plot_embeddings_with_clusters(clustered_low_dim_embeddings_df,
-                                                       output_path=os.getcwd() + "/" + PLOT_FOLDER + "/test.html",
-                                                       title="Zoom sur certains clusters",
-                                                       clusters=clusters_for_keywords.keys())
-
     # PAGE RANK
     clustered_low_dim_embeddings_df = pagerank.get_page_rank_df(clustered_low_dim_embeddings_df)
 
@@ -138,6 +131,14 @@ def main(keywords):
         print("Cluster number {} with keywords : {}".format(cluster, clusters_for_keywords[cluster]))
         print(clustered_low_dim_embeddings_df[clustered_low_dim_embeddings_df["cluster"] == cluster].sort_values(
             "pagerank_score", ascending=False).head(10).loc[:, "word"].values.tolist())
+
+    if PLOTS:
+        reduce_dimension.plot_embeddings_with_clusters(clustered_low_dim_embeddings_df,
+                                                       output_path=os.getcwd() + "/" + PLOT_FOLDER + "/" + str(
+                                                           NUM_CLUSTERS) + "_clusters.html",
+                                                       title="Top 20 des mots pour " + str(NUM_CLUSTERS) + " clusters",
+                                                       top_n=20,
+                                                       clusters=np.arange(NUM_CLUSTERS))
 
 
 if __name__ == '__main__':

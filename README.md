@@ -23,22 +23,6 @@ launch :
 
     python -m spacy download fr_core_news_sm
 
-## (Optional) Fix : Edit lefff.py if spacy_lefff before 0.3.5 (better to update)
-lefff.py file is located here: 
-~/anaconda/envs/granddebat/lib/python3.6/site-packages/spacy_lefff/lefff.py
-
-Replace __call\__ method by :
-
-    def __call__(self, doc):      
-        for token in doc:
-            if token._.melt_tagger is not None:
-                t = token._.melt_tagger.lower() if self.after_melt else token.pos_
-            else:
-                t = token.pos_
-            lemma = self.lemmatize(token.text, t)
-            token._.lefff_lemma = lemma
-    return doc
-
 ## RUN
 If needed, change parameters of application : folder paths (for data, model and plots), stopwords list etc... (see CAPITALIZED variables in main.py).
 Then run : 

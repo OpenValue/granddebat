@@ -13,4 +13,4 @@ dependencies:
     - umap-learn
     - swifter
     - gensim
-    - spacy_lefff
+    - spacy_lefff==0.3.5

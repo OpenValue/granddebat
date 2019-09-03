@@ -2,6 +2,7 @@ import umap
 from bokeh.plotting import figure, output_file, show, ColumnDataSource
 import pandas as pd
 from matplotlib import colors as mcolors
+import random
 
 
 def compute_low_dim_embeddings(data, min_dist=0.01, n_neighbors=15, metric='cosine'):
@@ -44,6 +45,8 @@ def plot_embeddings(embeddings_df, output_path, title, plot_top_n_words=None):
 def plot_embeddings_with_clusters(embeddings_df, output_path, title, top_n=10, clusters=None):
     output_file(output_path)
     colors = list(mcolors._colors_full_map.values())
+    random.shuffle(colors)
+
     if len(clusters) > 0:
         TOOLTIPS = [
             ("desc", "@desc"),
@@ -56,11 +59,12 @@ def plot_embeddings_with_clusters(embeddings_df, output_path, title, top_n=10, c
             sources.append(ColumnDataSource(data=dict(
                 x=embeddings_df[embeddings_df["cluster"] == cluster].head(top_n)["x"].values.tolist(),
                 y=embeddings_df[embeddings_df["cluster"] == cluster].head(top_n)["y"].values.tolist(),
-                desc=embeddings_df[embeddings_df["cluster"] == cluster].head(top_n)["word"].values.tolist(),
+                desc=embeddings_df[embeddings_df["cluster"] == cluster].sort_values(
+                    "pagerank_score", ascending=False).head(top_n)["word"].values.tolist(),
             )))
 
         for i, source in enumerate(sources):
-            p.circle('x', 'y', size=3, source=source, color=colors[i], alpha=0.3)
+            p.circle('x', 'y', size=3, source=source, color=colors[i], alpha=0.5)
 
         show(p)
 
